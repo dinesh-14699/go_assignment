@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"user_service/internal/services"
 	"user_service/models"
+    
+    cache "github.com/dinesh-14699/common_utils/cache"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -70,6 +72,34 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 
     json.NewEncoder(w).Encode(user)
 }
+
+func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	cachedData, err := cache.GetValue("all_users")
+	if err == nil && cachedData != "" {
+		var cachedUsers []models.User
+		err := json.Unmarshal([]byte(cachedData), &cachedUsers)
+		if err == nil {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(cachedUsers)
+			return
+		}
+	}
+
+	users, err := h.Service.GetAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	dataToCache, err := json.Marshal(users)
+	if err == nil {
+		cache.SetValue("all_users", string(dataToCache), 60)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(users)
+}
+
 
 
 func isValidEmail(email string) bool {

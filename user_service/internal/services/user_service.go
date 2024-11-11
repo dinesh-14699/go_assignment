@@ -63,3 +63,11 @@ func (s *UserService) GetUserByID(userID uint) (*models.User, error) {
     }
     return &user, nil
 }
+
+func (s *UserService) GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	if err := s.DB.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
+}

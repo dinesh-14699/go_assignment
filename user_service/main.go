@@ -8,10 +8,11 @@ import (
 	"user_service/config"
 	"user_service/db"
 	grpc_auth "github.com/dinesh-14699/common_utils/grpc_auth"
+    cache "github.com/dinesh-14699/common_utils/cache"
+
 	"user_service/internal/handlers"
 	"user_service/internal/services"
 	"user_service/middleware"
-
 	"github.com/go-chi/chi/v5"
 	"google.golang.org/grpc"
 )
@@ -21,6 +22,7 @@ import (
 func main() {
     config.LoadConfig()
     db.InitDB(config.DSN)
+    cache.InitializeCache("54.221.19.22:6379", "", 0)
 
     userService := services.NewUserService(db.DB)
     userHandler := handlers.NewUserHandler(userService)
@@ -58,6 +60,7 @@ func main() {
         r.Route("/user", func(r chi.Router) {
             r.Use(middleware.AuthMiddleware)
             r.Get("/{userID}", userHandler.GetUser)
+            r.Get("/all", userHandler.GetAllUsers)
         })
 
         log.Println("Starting HTTP server on :8081...")

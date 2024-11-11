@@ -6,4 +6,5 @@ type UserServiceInterface interface {
     RegisterUser(models.User) error
     LoginUser(username, password string) (string, error) 
     GetUserByID(userID uint) (*models.User, error)
+    GetAllUsers() ([]models.User, error)
 }
