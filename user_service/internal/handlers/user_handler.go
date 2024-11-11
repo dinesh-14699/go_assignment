@@ -8,7 +8,7 @@ import (
 	"user_service/internal/services"
 	"user_service/models"
     
-    cache "github.com/dinesh-14699/common_utils/cache"
+    cache "github.com/dinesh-14699/go_assignment/common_utils/cache"
 
 	"github.com/go-chi/chi/v5"
 )

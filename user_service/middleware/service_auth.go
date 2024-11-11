@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 	"user_service/config"
-	"github.com/dinesh-14699/common_utils/grpc_auth"
+	"github.com/dinesh-14699/go_assignment/common_utils/grpc_auth"
 
 	"github.com/golang-jwt/jwt/v5"
 )

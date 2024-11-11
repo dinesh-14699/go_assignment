@@ -7,8 +7,8 @@ import (
 	"sync"
 	"user_service/config"
 	"user_service/db"
-	grpc_auth "github.com/dinesh-14699/common_utils/grpc_auth"
-    cache "github.com/dinesh-14699/common_utils/cache"
+	grpc_auth "github.com/dinesh-14699/go_assignment/common_utils/grpc_auth"
+    cache "github.com/dinesh-14699/go_assignment/common_utils/cache"
 
 	"user_service/internal/handlers"
 	"user_service/internal/services"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-    "github.com/dinesh-14699/common_utils/grpc_auth"
+    "github.com/dinesh-14699/go_assignment/common_utils/grpc_auth"
 	"google.golang.org/grpc"
 )
 
