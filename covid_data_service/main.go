@@ -1,6 +1,7 @@
 package main
 
 import (
+	"covid_handler/cache"
 	"covid_handler/handlers"
 	// "covid_handler/middleware"
 	"log"
@@ -12,6 +13,7 @@ import (
 
 func main() {
     router := chi.NewRouter()
+    cache.InitializeCache("54.221.19.22:6379", "", 0)
 
     // router.Use(middleware.Logger)
     // router.Use(middleware.TokenValidationMiddleware) 

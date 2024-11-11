@@ -13,17 +13,7 @@ import (
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
     "github.com/go-echarts/go-echarts/v2/charts"
-	"github.com/go-redis/redis/v8"
 )
-
-var redisClient *redis.Client
-
-func init() {
-    redisClient = redis.NewClient(&redis.Options{
-        Addr: "localhost:6379", 
-        DB:   0, 
-    })
-}
 
 type CovidData struct {
     Country     string `json:"country"`

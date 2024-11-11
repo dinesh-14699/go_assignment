@@ -1,6 +1,7 @@
 package services
 
 import (
+	"covid_handler/cache"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -28,6 +29,36 @@ type CovidTimeSeriesEntry struct {
 
 
 func FetchCovidData(region string) (*CovidData, error) {
+
+	cachedData, err := cache.GetValue(region)
+	if err == nil && cachedData != "" {
+		var cachedCovidData CovidData
+		err := json.Unmarshal([]byte(cachedData), &cachedCovidData)
+		if err == nil {
+			return &cachedCovidData, nil
+		}
+	}
+
+	data, err := FetchCovidDataFromUrl(region)
+	if err != nil {
+		return nil, err
+	}
+
+	cacheData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling data to cache: %v", err)
+	}
+
+	err = cache.SetValue(region, string(cacheData), 300) 
+	if err != nil {
+		return nil, fmt.Errorf("error setting cache: %v", err)
+	}
+
+	return data, nil
+}
+
+
+func FetchCovidDataFromUrl(region string) (*CovidData, error) {
 	url := fmt.Sprintf("https://disease.sh/v3/covid-19/countries/%s", region)
   
 	resp, err := http.Get(url)
@@ -46,7 +77,6 @@ func FetchCovidData(region string) (*CovidData, error) {
 
 	return &data, nil
 }
-
 
 func FetchCovidTimeSeriesData(country string) ([]CovidTimeSeriesEntry, error) {
     url := fmt.Sprintf("https://disease.sh/v3/covid-19/historical/%s?lastdays=30", country) // Example API endpoint
