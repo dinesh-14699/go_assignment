@@ -5,8 +5,6 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
-github.com/dinesh-14699/common_utils v0.0.0-20241111080610-3e4b159fcd47 h1:AFJvu+PjiYkIpnRxK3Q9PGBoCSqe7uBAqemWGI6KtBs=
-github.com/dinesh-14699/common_utils v0.0.0-20241111080610-3e4b159fcd47/go.mod h1:E33PgWeDs7iJAxD+VfIQ4IwnOJGrd/2ZFXl78A3xBBQ=
 github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5 h1:eIrgY4rcBN2d4biS+bYmKajTLMk3i2hdhgCXV+2wGPE=
 github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5/go.mod h1:h/4AhNrr/Tqz8xYwEPhtbwmGxQ9qffuAZuieR6CDnjU=
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=

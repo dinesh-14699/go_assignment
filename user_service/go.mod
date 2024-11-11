@@ -19,7 +19,6 @@ require (
 )
 
 require (
-	github.com/dinesh-14699/common_utils v0.0.0-20241111080610-3e4b159fcd47
 	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgpassfile v1.0.0 // indirect
