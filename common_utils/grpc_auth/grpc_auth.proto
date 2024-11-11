@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package grpc_auth;
+option go_package = "/grpc_auth";
+
+service AuthService {
+    rpc ValidateToken (ValidationRequest) returns (ValidationResponse);
+}
+
+message ValidationRequest {
+    string token = 1;
+}
+
+message ValidationResponse {
+    bool is_valid = 1;
+    string message = 2;
+    string user_id = 3;         
+    string username = 4;        
+    string email = 5;           
+}
