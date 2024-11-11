@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"covid_handler/services"
 	"encoding/csv"
 	"encoding/json"
@@ -9,15 +8,12 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/go-chi/chi/v5"
-	// "github.com/go-echarts/go-echarts/charts"
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
     "github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
 )
 
 var redisClient *redis.Client
@@ -41,40 +37,15 @@ type CovidData struct {
 func GetCovidData(w http.ResponseWriter, r *http.Request) {
     country := chi.URLParam(r, "country")
 
-    ctx := context.Background()
-    cacheKey := fmt.Sprintf("covid:%s", country)
-    // cachedData, err := redisClient.Get(ctx, cacheKey).Result()
-    // if err == nil {
-    //     logrus.Info("Cache hit for country:", country)
-    //     w.Header().Set("Content-Type", "application/json")
-    //     w.Write([]byte(cachedData))
-    //     return
-    // }
+	covidData, err := services.FetchCovidData(country)
 
-    url := fmt.Sprintf("https://disease.sh/v3/covid-19/countries/%s", country)
-    resp, err := http.Get(url)
-    if err != nil {
-        http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
-        logrus.Error("Error fetching data:", err)
-        return
-    }
-    defer resp.Body.Close()
-
-    if resp.StatusCode != http.StatusOK {
-        http.Error(w, "Error from API", http.StatusBadGateway)
-        logrus.Error("Non-200 response from API:", resp.StatusCode)
-        return
-    }
-
-    var covidData CovidData
-    if err := json.NewDecoder(resp.Body).Decode(&covidData); err != nil {
-        http.Error(w, "Failed to decode API response", http.StatusInternalServerError)
-        logrus.Error("Error decoding response:", err)
-        return
-    }
+    fmt.Println(covidData)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error fetching data: %v", err), http.StatusInternalServerError)
+		return
+	}
 
     covidJSON, _ := json.Marshal(covidData)
-    redisClient.Set(ctx, cacheKey, covidJSON, 10*time.Minute)
 
 
     services.SendLog("covid_data_service", "info", fmt.Sprintf("Fetched COVID data for %s from API", country), "1", "dinesh")
