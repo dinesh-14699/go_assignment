@@ -19,6 +19,14 @@ type CovidData struct {
 	LastUpdatedFormatted string `json:"lastUpdatedFormatted"`
 }
 
+type CovidTimeSeriesEntry struct {
+    Date      time.Time
+    Cases     int
+    Deaths    int
+    Recovered int
+}
+
+
 func FetchCovidData(region string) (*CovidData, error) {
 	url := fmt.Sprintf("https://disease.sh/v3/covid-19/countries/%s", region)
   
@@ -37,4 +45,49 @@ func FetchCovidData(region string) (*CovidData, error) {
 
 
 	return &data, nil
+}
+
+
+func FetchCovidTimeSeriesData(country string) ([]CovidTimeSeriesEntry, error) {
+    url := fmt.Sprintf("https://disease.sh/v3/covid-19/historical/%s?lastdays=30", country) // Example API endpoint
+    resp, err := http.Get(url)
+    if err != nil {
+        return nil, fmt.Errorf("failed to fetch data: %w", err)
+    }
+    defer resp.Body.Close()
+
+    if resp.StatusCode != http.StatusOK {
+        return nil, fmt.Errorf("error from API: status code %d", resp.StatusCode)
+    }
+
+    var responseData struct {
+        Timeline struct {
+            Cases     map[string]int `json:"cases"`
+            Deaths    map[string]int `json:"deaths"`
+            Recovered map[string]int `json:"recovered"`
+        } `json:"timeline"`
+    }
+    if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
+        return nil, fmt.Errorf("failed to decode API response: %w", err)
+    }
+
+    var timeSeriesData []CovidTimeSeriesEntry
+    for dateStr, cases := range responseData.Timeline.Cases {
+        parsedDate, err := time.Parse("1/2/06", dateStr) 
+        if err != nil {
+            continue 
+        }
+
+        deaths := responseData.Timeline.Deaths[dateStr]
+        recovered := responseData.Timeline.Recovered[dateStr]
+
+        timeSeriesData = append(timeSeriesData, CovidTimeSeriesEntry{
+            Date:      parsedDate,
+            Cases:     cases,
+            Deaths:    deaths,
+            Recovered: recovered,
+        })
+    }
+
+    return timeSeriesData, nil
 }

@@ -3,15 +3,21 @@ package handlers
 import (
 	"context"
 	"covid_handler/services"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	// "github.com/go-echarts/go-echarts/charts"
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/go-echarts/go-echarts/v2/opts"
+    "github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
-    "github.com/go-echarts/go-echarts/charts"
 )
 
 var redisClient *redis.Client
@@ -122,17 +128,29 @@ func GenerateCovidReportGraph(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Create a new bar chart
 	bar := charts.NewBar()
 
-	bar.AddXAxis([]string{"Cases", "Deaths", "Recovered", "Active"}).
-		AddYAxis("COVID Stats", []int{data.Cases, data.Deaths, data.Recovered, data.ActiveCases})
+    // Set the X-axis categories
+    bar.SetXAxis([]string{"Cases", "Deaths", "Recovered", "Active"})
 
+    // Add the data to the bar chart
+    barData := []opts.BarData{
+        {Value: data.Cases},
+        {Value: data.Deaths},
+        {Value: data.Recovered},
+        {Value: data.ActiveCases},
+    }
+
+    bar.AddSeries("COVID Stats", barData)
+
+	// Set global options (like title)
 	bar.SetGlobalOptions(
-		charts.TitleOpts{
-			Title: fmt.Sprintf("COVID Data for %s", data.Country),
-		},
+		charts.WithTitleOpts(opts.Title{Title: fmt.Sprintf("COVID-19 Trend Analysis for %s", region)}),
 	)
+	
 
+	// Set the response content type to HTML
 	w.Header().Set("Content-Type", "text/html")
 	err = bar.Render(w)
 	if err != nil {
@@ -142,3 +160,76 @@ func GenerateCovidReportGraph(w http.ResponseWriter, r *http.Request) {
 
 
 
+func GenerateCovidTrendGraph(w http.ResponseWriter, r *http.Request) {
+    country := r.URL.Query().Get("country")
+    if country == "" {
+        http.Error(w, "Country parameter is required", http.StatusBadRequest)
+        return
+    }
+
+    data, err := services.FetchCovidTimeSeriesData(country)
+    if err != nil {
+        http.Error(w, fmt.Sprintf("Error fetching data: %v", err), http.StatusInternalServerError)
+        log.Println("Error fetching time series data:", err)
+        return
+    }
+
+    lineChart := charts.NewLine()
+    lineChart.SetGlobalOptions(
+        charts.WithTitleOpts(opts.Title{Title: fmt.Sprintf("COVID-19 Trend Analysis for %s", country)}),
+        charts.WithXAxisOpts(opts.XAxis{
+            Name: "Date",
+            Type: "category",
+        }),
+    )
+
+    var dates []string
+    var cases []opts.LineData
+	var deaths []opts.LineData
+	var recovered []opts.LineData
+
+
+    for _, entry := range data {
+        dates = append(dates, entry.Date.Format("2006-01-02")) 
+        cases = append(cases, opts.LineData{Value: entry.Cases})
+		deaths = append(deaths, opts.LineData{Value: entry.Deaths})
+		recovered = append(recovered, opts.LineData{Value: entry.Recovered})
+    }
+
+    lineChart.SetXAxis(dates).
+	AddSeries("Cases", cases).
+	AddSeries("Deaths", deaths).
+	AddSeries("Recoverd", recovered)
+    
+    page := components.NewPage()
+    page.AddCharts(lineChart)
+    page.Render(w)
+}
+
+func DownloadCovidData(w http.ResponseWriter, r *http.Request) {
+	region := r.URL.Query().Get("region")
+	
+	data, err := services.FetchCovidData(region)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error fetching data: %v", err), http.StatusInternalServerError)
+		return
+	}
+   
+
+    w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s-covid-data.csv", region))
+    w.Header().Set("Content-Type", "text/csv")
+
+    writer := csv.NewWriter(w)
+    defer writer.Flush()
+
+    writer.Write([]string{"Country", "Cases", "Deaths", "Recovered", "Active", "Updated"})
+
+	writer.Write([]string{
+		data.Country,
+		strconv.Itoa(data.Cases),
+		strconv.Itoa(data.Deaths),
+		strconv.Itoa(data.Recovered),
+		strconv.Itoa(data.ActiveCases),
+	    data.LastUpdatedFormatted,
+	})
+}

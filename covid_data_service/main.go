@@ -2,7 +2,7 @@ package main
 
 import (
 	"covid_handler/handlers"
-	"covid_handler/middleware"
+	// "covid_handler/middleware"
 	"log"
 	"net/http"
 
@@ -14,12 +14,14 @@ func main() {
     router := chi.NewRouter()
 
     // router.Use(middleware.Logger)
-    router.Use(middleware.TokenValidationMiddleware) 
+    // router.Use(middleware.TokenValidationMiddleware) 
 
     router.Get("/covid/{country}", handlers.GetCovidData)
     
     router.Get("/covid-report-table", handlers.GenerateCovidReportTable)
 	router.Get("/covid-report-graph", handlers.GenerateCovidReportGraph)
+	router.Get("/covid-report-download", handlers.DownloadCovidData)
+	router.Get("/covid-report-trend", handlers.GenerateCovidTrendGraph)
 
 
     logrus.Info("Starting server on port 8082...")

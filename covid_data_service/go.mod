@@ -19,6 +19,7 @@ require (
 )
 
 require (
+	github.com/go-echarts/go-echarts/v2 v2.4.5
 	github.com/go-redis/redis/v8 v8.11.5
 	golang.org/x/sys v0.24.0 // indirect
 	google.golang.org/grpc v1.67.1
