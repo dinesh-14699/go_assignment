@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COVID-19 Daily Update</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            text-align: center;
+            padding-top: 30px;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(even) td {
+            background-color: #f1f1f1;
+        }
+        tr:hover td {
+            background-color: #e9ecef;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>COVID-19 Daily Update</h1>
+        <p>Dear {{ .To }},</p>
+        <p>Here are today's COVID-19 details:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>New Cases</th>
+                    <th>Deaths</th>
+                    <th>Recoveries</th>
+                    <th>Active Cases</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .CovidData }}
+                <tr>
+                    <td>{{ .LastUpdatedFormatted }}</td>
+                    <td>{{ .Cases }}</td>
+                    <td>{{ .Deaths }}</td>
+                    <td>{{ .Recovered }}</td>
+                    <td>{{ .ActiveCases }}</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+
+        <p>Stay safe and informed.</p>
+        <p>Best regards,</p>
+        <p>Your COVID Analytics Team</p>
+    </div>
+
+    <div class="footer">
+        <p>COVID Analytics | <a href="#">Unsubscribe</a> | <a href="#">Privacy Policy</a></p>
+    </div>
+
+</body>
+</html>
