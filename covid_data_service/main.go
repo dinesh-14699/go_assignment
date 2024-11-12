@@ -1,8 +1,10 @@
 package main
 
 import (
-	"covid_handler/cache"
+	// "covid_handler/cache"
 	"covid_handler/handlers"
+	"covid_handler/pubsubservice"
+
 	// "covid_handler/middleware"
 	"log"
 	"net/http"
@@ -13,17 +15,27 @@ import (
 
 func main() {
     router := chi.NewRouter()
-    cache.InitializeCache("54.221.19.22:6379", "", 0)
+    // cache.InitializeCache("100.29.10.135:6379", "", 0)
 
     // router.Use(middleware.Logger)
     // router.Use(middleware.TokenValidationMiddleware) 
 
-    router.Get("/covid/{country}", handlers.GetCovidData)
+	projectID := "go-lang-440709"
+	location := "../gcp.json"
     
+	err := pubsubservice.InitializePubSubClient(projectID, location)
+	if err != nil {
+		log.Fatalf("Failed to initialize Pub/Sub client: %v", err)
+	} else {
+		logrus.Info("initialize Pub/Sub client")
+	}
+
+    router.Get("/covid/{country}", handlers.GetCovidData)
     router.Get("/covid-report-table", handlers.GenerateCovidReportTable)
 	router.Get("/covid-report-graph", handlers.GenerateCovidReportGraph)
 	router.Get("/covid-report-download", handlers.DownloadCovidData)
 	router.Get("/covid-report-trend", handlers.GenerateCovidTrendGraph)
+	router.Get("/send-covid-notification", handlers.FetchCovidDataAndPublish)
 
 
     logrus.Info("Starting server on port 8082...")

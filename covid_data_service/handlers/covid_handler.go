@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"covid_handler/pubsubservice"
 	"covid_handler/services"
 	"encoding/csv"
 	"encoding/json"
@@ -10,9 +11,10 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
-    "github.com/go-echarts/go-echarts/v2/charts"
+	"github.com/sirupsen/logrus"
 )
 
 type CovidData struct {
@@ -193,4 +195,47 @@ func DownloadCovidData(w http.ResponseWriter, r *http.Request) {
 		strconv.Itoa(data.ActiveCases),
 	    data.LastUpdatedFormatted,
 	})
+}
+
+
+func FetchCovidDataAndPublish(w http.ResponseWriter, r *http.Request) {
+	covidData := []services.CovidData{
+		{
+			Region:    "Region 1",
+			Cases:     100,
+			Deaths:    10,
+			Recovered: 90,
+		},
+	}
+
+	subject := "COVID-19 Daily Update"
+
+	type CovidDataPayload struct {
+		Subject  string               `json:"subject"`
+		CovidData []services.CovidData `json:"covid_data"`
+	}
+
+	payload := CovidDataPayload{
+		Subject:  subject,
+		CovidData: covidData,
+	}
+
+	msg, err := json.Marshal(payload)
+	if err != nil {
+		logrus.Errorf("Error marshaling COVID data: %v", err)
+		http.Error(w, "Error marshaling COVID data", http.StatusInternalServerError)
+		return
+	}
+
+	id, err := pubsubservice.PublishMessage("MyTopic", string(msg))
+	if err != nil {
+		logrus.Errorf("Failed to publish message to Pub/Sub: %v", err)
+		http.Error(w, "Failed to publish message to Pub/Sub", http.StatusInternalServerError)
+		return
+	}
+
+	logrus.Infof("Message published successfully. Pub/Sub message ID: %s", id)
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("COVID data and subject published successfully"))
 }
