@@ -20,7 +20,7 @@ func (h *NotificationHandler) SendNotification(w http.ResponseWriter, r *http.Re
 	var requestBody struct {
 		To           string `json:"to"`
 		Subject      string `json:"subject"`
-		Body         string `json:"body"`
+		Country      string `json:"country"`
 		EmailService string `json:"email_service,omitempty"` 
 	}
 
@@ -42,10 +42,13 @@ func (h *NotificationHandler) SendNotification(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	covidData := []services.CovidData{
-		{LastUpdatedFormatted: "2024-11-12", Cases: 100, Deaths: 2, Recovered: 80, ActiveCases: 18},
+	covidData := []services.CovidData{}
+	data, err := services.FetchCovidDataFromUrl(requestBody.Country)
+
+	if err == nil {
+		covidData = append(covidData, *data)
 	}
-	
+
 	if err := emailService.SendEmail(requestBody.To, requestBody.Subject, covidData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
