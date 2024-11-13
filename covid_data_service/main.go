@@ -35,7 +35,7 @@ func main() {
 	router.Get("/covid-report-graph", handlers.GenerateCovidReportGraph)
 	router.Get("/covid-report-download", handlers.DownloadCovidData)
 	router.Get("/covid-report-trend", handlers.GenerateCovidTrendGraph)
-	router.Get("/send-covid-notification", handlers.FetchCovidDataAndPublish)
+	router.Post("/send-covid-notification", handlers.FetchCovidDataAndPublish)
 
 
     logrus.Info("Starting server on port 8082...")

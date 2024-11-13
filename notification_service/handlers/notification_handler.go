@@ -42,14 +42,14 @@ func (h *NotificationHandler) SendNotification(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	covidData := []services.CovidData{}
+	covidDataNew := []services.CovidData{}
 	data, err := services.FetchCovidDataFromUrl(requestBody.Country)
 
 	if err == nil {
-		covidData = append(covidData, *data)
+		covidDataNew = append(covidDataNew, *data)
 	}
 
-	if err := emailService.SendEmail(requestBody.To, requestBody.Subject, covidData); err != nil {
+	if err := emailService.SendEmail(requestBody.To, requestBody.Subject, covidDataNew); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

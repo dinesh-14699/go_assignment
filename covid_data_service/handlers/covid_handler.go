@@ -199,26 +199,27 @@ func DownloadCovidData(w http.ResponseWriter, r *http.Request) {
 
 
 func FetchCovidDataAndPublish(w http.ResponseWriter, r *http.Request) {
-	covidData := []services.CovidData{
-		{
-			Region:    "Region 1",
-			Cases:     100,
-			Deaths:    10,
-			Recovered: 90,
-		},
-	}
-
-	subject := "COVID-19 Daily Update"
 
 	type CovidDataPayload struct {
-		Subject  string               `json:"subject"`
-		CovidData []services.CovidData `json:"covid_data"`
+		Subject  string                `json:"subject"`
+		To       string                `json:"to"`
+		Country  string                `json:"country"`
 	}
 
-	payload := CovidDataPayload{
-		Subject:  subject,
-		CovidData: covidData,
-	}
+	var payload CovidDataPayload
+    decoder := json.NewDecoder(r.Body)
+    err := decoder.Decode(&payload)
+    if err != nil {
+        logrus.Errorf("Error decoding request body: %v", err)
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    if payload.Subject == "" || payload.To == "" || payload.Country == "" {
+        logrus.Error("Missing required fields in request body")
+        http.Error(w, "Missing required fields: subject, to, or country", http.StatusBadRequest)
+        return
+    }
 
 	msg, err := json.Marshal(payload)
 	if err != nil {

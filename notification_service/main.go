@@ -7,6 +7,7 @@ import (
 	"notification_service/config"
 	"notification_service/handlers"
 	"notification_service/pubsubservice"
+	"notification_service/subscribers"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
@@ -22,6 +23,7 @@ func main() {
 	cfg := config.LoadConfig()
 
 	handler := handlers.NewNotificationHandler(cfg)
+    subscriber := subscribers.NewSubscribers(cfg)
 
 	projectID := "go-lang-440709"
 	location := "../gcp.json"
@@ -36,7 +38,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Post("/send-notification", handler.SendNotification)
 
-    go startSubscriber()
+    go startSubscriber(subscriber)
 
 	log.Println("Starting Notification Service on port:", cfg.Port)
 	if err := http.ListenAndServe(":"+cfg.Port, r); err != nil {
@@ -44,7 +46,7 @@ func main() {
 	}
 }
 
-func startSubscriber() {
+func startSubscriber(subscriber *subscribers.Subscribers) {
 	subscriptionID := "MySub"
 	updateChan := make(chan string)
 
@@ -53,7 +55,7 @@ func startSubscriber() {
 	fmt.Println("Listening for messages...")
 
 	for msg := range updateChan {
-		fmt.Printf("Processed message: %s\n", msg)
+		subscriber.ReceiveMessages(msg)
 	}
 }
 
