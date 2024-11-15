@@ -4,7 +4,7 @@ import (
 	"covid_handler/handlers"
 	"covid_handler/pubsubservice"
 
-	// "covid_handler/middleware"
+	"covid_handler/middleware"
 	"log"
 	"net/http"
     "github.com/dinesh-14699/go_assignment/common_utils/logger"
@@ -17,8 +17,7 @@ func main() {
     router := chi.NewRouter()
     cache.InitializeCache("98.82.179.245:6379", "", 0)
 
-    // router.Use(middleware.Logger)
-    // router.Use(middleware.TokenValidationMiddleware) 
+    router.Use(middleware.TokenValidationMiddleware) 
 
 	projectID := "go-lang-440709"
 	location := "../gcp.json"

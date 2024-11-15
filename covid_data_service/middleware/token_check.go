@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
     "github.com/dinesh-14699/go_assignment/common_utils/grpc_auth"
+    "github.com/dinesh-14699/go_assignment/common_utils/logger"
 	"google.golang.org/grpc"
 )
 
@@ -48,6 +49,8 @@ func validateTokenWithGRPC(token string) (bool, error) {
     response, err := client.ValidateToken(context.Background(), &grpc_auth.ValidationRequest{Token: token})
 
     fmt.Print(response, err)
+
+    logger.UpdateLogContext(response.Username, response.UserId)
 
     if err != nil {
         return false, err

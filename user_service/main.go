@@ -22,7 +22,7 @@ import (
 func main() {
     config.LoadConfig()
     db.InitDB(config.DSN)
-    cache.InitializeCache("54.221.19.22:6379", "", 0)
+    cache.InitializeCache("98.82.179.245:6379", "", 0)
 
     userService := services.NewUserService(db.DB)
     userHandler := handlers.NewUserHandler(userService)
