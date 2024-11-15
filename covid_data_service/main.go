@@ -5,7 +5,6 @@ import (
 	"covid_handler/pubsubservice"
 
 	"covid_handler/middleware"
-	"log"
 	"net/http"
     "github.com/dinesh-14699/go_assignment/common_utils/logger"
 	"github.com/dinesh-14699/go_assignment/common_utils/cache"
@@ -27,9 +26,9 @@ func main() {
 
 	err := pubsubservice.InitializePubSubClient(projectID, location)
 	if err != nil {
-		log.Fatalf("Failed to initialize Pub/Sub client: %v", err)
+		logger.Log.Fatalf("Failed to initialize Pub/Sub client: %v", err)
 	} else {
-		logrus.Info("initialize Pub/Sub client")
+		logger.Log.Info("initialize Pub/Sub client")
 	}
 
     router.Get("/covid/{country}", handlers.GetCovidData)
@@ -42,6 +41,6 @@ func main() {
 
     logrus.Info("Starting server on port 8082...")
     if err := http.ListenAndServe(":8082", router); err != nil {
-        log.Fatal("Server failed to start:", err)
+        logger.Log.Fatal("Server failed to start:", err)
     }
 }

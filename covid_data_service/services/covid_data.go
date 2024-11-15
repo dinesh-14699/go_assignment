@@ -1,11 +1,13 @@
 package services
 
 import (
-	"github.com/dinesh-14699/go_assignment/common_utils/cache"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/dinesh-14699/go_assignment/common_utils/cache"
+	"github.com/dinesh-14699/go_assignment/common_utils/logger"
 )
 
 type CovidData struct {
@@ -46,11 +48,13 @@ func FetchCovidData(region string) (*CovidData, error) {
 
 	cacheData, err := json.Marshal(data)
 	if err != nil {
+		logger.Log.Errorf("error marshalling data to cache: %v", err)
 		return nil, fmt.Errorf("error marshalling data to cache: %v", err)
 	}
 
 	err = cache.SetValue(region, string(cacheData), 300) 
 	if err != nil {
+		logger.Log.Errorf("error setting cache: %v", err)
 		return nil, fmt.Errorf("error setting cache: %v", err)
 	}
 
@@ -63,12 +67,14 @@ func FetchCovidDataFromUrl(region string) (*CovidData, error) {
   
 	resp, err := http.Get(url)
 	if err != nil {
+		logger.Log.Errorf("error fetching data: %v", err)
 		return nil, fmt.Errorf("error fetching data: %v", err)
 	}
 	defer resp.Body.Close()
 
 	var data CovidData
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		logger.Log.Errorf("error decoding response: %v", err)
 		return nil, fmt.Errorf("error decoding response: %v", err)
 	}
 
@@ -82,11 +88,13 @@ func FetchCovidTimeSeriesData(country string) ([]CovidTimeSeriesEntry, error) {
     url := fmt.Sprintf("https://disease.sh/v3/covid-19/historical/%s?lastdays=30", country) // Example API endpoint
     resp, err := http.Get(url)
     if err != nil {
+		logger.Log.Errorf("failed to fetch data: %v", err)
         return nil, fmt.Errorf("failed to fetch data: %w", err)
     }
     defer resp.Body.Close()
 
     if resp.StatusCode != http.StatusOK {
+		logger.Log.Errorf("error decoding response: %v", err)
         return nil, fmt.Errorf("error from API: status code %d", resp.StatusCode)
     }
 
@@ -98,6 +106,7 @@ func FetchCovidTimeSeriesData(country string) ([]CovidTimeSeriesEntry, error) {
         } `json:"timeline"`
     }
     if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
+		logger.Log.Errorf("failed to decode API response: %v", err)
         return nil, fmt.Errorf("failed to decode API response: %w", err)
     }
 
