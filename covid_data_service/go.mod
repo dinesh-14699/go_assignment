@@ -44,7 +44,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/pubsub v1.45.1
+	cloud.google.com/go/pubsub v1.45.1 // indirect
 	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241115064220-f7f59603cc8e
 	github.com/go-echarts/go-echarts/v2 v2.4.5
 	golang.org/x/sys v0.27.0 // indirect
