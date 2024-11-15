@@ -17,3 +17,10 @@ func InitLogger(url string, serviceType string) {
 
     Log = baseLogger.WithField("service_type", serviceType)
 }
+
+func UpdateLogContext(username string, userID string) {
+    Log = Log.WithFields(logrus.Fields{
+        "username": username,
+        "user_id":  userID,
+    })
+}
