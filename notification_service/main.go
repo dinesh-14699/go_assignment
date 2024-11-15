@@ -6,17 +6,21 @@ import (
 	"net/http"
 	"notification_service/config"
 	"notification_service/handlers"
+	"notification_service/middleware"
 	"notification_service/pubsubservice"
 	"notification_service/subscribers"
 
+	"github.com/dinesh-14699/go_assignment/common_utils/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	logger.InitLogger("http://localhost:8084/logs", "notifiaction-service")
+    logger.Log.Info("Application has started")
 
 	if err := godotenv.Load(); err != nil {
+		logger.Log.Error("No .env file found, relying on environment variables.")
 		log.Println("No .env file found, relying on environment variables.")
 	}
 
@@ -30,19 +34,21 @@ func main() {
 
 	err := pubsubservice.InitializePubSubClient(projectID, location)
 	if err != nil {
-		log.Fatalf("Failed to initialize Pub/Sub client: %v", err)
+		logger.Log.Fatalf("Failed to initialize Pub/Sub client: %v", err)
 	} else {
-		logrus.Info("initialize Pub/Sub client")
+		logger.Log.Info("initialize Pub/Sub client")
 	}
 
 	r := chi.NewRouter()
+	r.Use(middleware.TokenValidationMiddleware) 
+
 	r.Post("/send-notification", handler.SendNotification)
 
     go startSubscriber(subscriber)
 
-	log.Println("Starting Notification Service on port:", cfg.Port)
+	logger.Log.Println("Starting Notification Service on port:", cfg.Port)
 	if err := http.ListenAndServe(":"+cfg.Port, r); err != nil {
-		log.Fatal("Failed to start server:", err)
+		logger.Log.Fatal("Failed to start server:", err)
 	}
 }
 
