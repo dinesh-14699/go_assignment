@@ -2,12 +2,12 @@ package main
 
 import (
 	"covid_handler/handlers"
-	"covid_handler/pubsubservice"
 
 	"covid_handler/middleware"
 	"net/http"
     "github.com/dinesh-14699/go_assignment/common_utils/logger"
 	"github.com/dinesh-14699/go_assignment/common_utils/cache"
+	"github.com/dinesh-14699/go_assignment/common_utils/pubsubservice"
 	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"
 )

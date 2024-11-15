@@ -7,7 +7,7 @@ import (
 	"notification_service/config"
 	"notification_service/handlers"
 	"notification_service/middleware"
-	"notification_service/pubsubservice"
+	"github.com/dinesh-14699/go_assignment/common_utils/pubsubservice"
 	"notification_service/subscribers"
 
 	"github.com/dinesh-14699/go_assignment/common_utils/logger"

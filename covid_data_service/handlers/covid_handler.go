@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"covid_handler/pubsubservice"
 	"covid_handler/services"
 	"encoding/csv"
 	"encoding/json"
@@ -14,6 +13,7 @@ import (
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"github.com/dinesh-14699/go_assignment/common_utils/logger"
+	"github.com/dinesh-14699/go_assignment/common_utils/pubsubservice"
 )
 
 type CovidData struct {
