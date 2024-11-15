@@ -8,6 +8,7 @@ import (
 	// "covid_handler/middleware"
 	"log"
 	"net/http"
+	"covid_handler/logger"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"
@@ -22,7 +23,10 @@ func main() {
 
 	projectID := "go-lang-440709"
 	location := "../gcp.json"
+	logger.InitLogger("http://localhost:8084/logs", "covid-data-service")
+    logger.Log.Info("Application has started")
     
+
 	err := pubsubservice.InitializePubSubClient(projectID, location)
 	if err != nil {
 		log.Fatalf("Failed to initialize Pub/Sub client: %v", err)

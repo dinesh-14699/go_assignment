@@ -15,6 +15,7 @@ import (
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"github.com/sirupsen/logrus"
+	"covid_handler/logger"
 )
 
 type CovidData struct {
@@ -91,13 +92,10 @@ func GenerateCovidReportGraph(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a new bar chart
 	bar := charts.NewBar()
 
-    // Set the X-axis categories
     bar.SetXAxis([]string{"Cases", "Deaths", "Recovered", "Active"})
 
-    // Add the data to the bar chart
     barData := []opts.BarData{
         {Value: data.Cases},
         {Value: data.Deaths},
@@ -107,13 +105,11 @@ func GenerateCovidReportGraph(w http.ResponseWriter, r *http.Request) {
 
     bar.AddSeries("COVID Stats", barData)
 
-	// Set global options (like title)
 	bar.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: fmt.Sprintf("COVID-19 Trend Analysis for %s", region)}),
 	)
 	
 
-	// Set the response content type to HTML
 	w.Header().Set("Content-Type", "text/html")
 	err = bar.Render(w)
 	if err != nil {
@@ -129,6 +125,8 @@ func GenerateCovidTrendGraph(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Country parameter is required", http.StatusBadRequest)
         return
     }
+ 
+	logger.Log.Info("generate trend graph api has been started")
 
     data, err := services.FetchCovidTimeSeriesData(country)
     if err != nil {
