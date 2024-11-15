@@ -1,14 +1,15 @@
 package middleware
 
 import (
-    "context"
-    "net/http"
-    "strings"
-    "time"
-    "user_service/config"
+	"context"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+	"user_service/config"
 
-    "github.com/golang-jwt/jwt/v5"
-    "github.com/dinesh-14699/go_assignment/common_utils/logger"
+	"github.com/dinesh-14699/go_assignment/common_utils/logger"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type contextKey string
@@ -61,11 +62,12 @@ func AuthMiddleware(next http.Handler) http.Handler {
                 http.Error(w, "Invalid user ID in token", http.StatusUnauthorized)
                 return
             }
-            
-            userID, _ := claims["user_id"].(string)
+
+            userID, _ := claims["user_id"].(float64)
+            userIDStr := strconv.FormatFloat(userID, 'f', -1, 64)
             username, _ := claims["username"].(string)
     
-            logger.UpdateLogContext(username,userID)
+            logger.UpdateLogContext(username, userIDStr)
         } else {
             http.Error(w, "Invalid token claims", http.StatusUnauthorized)
             return
