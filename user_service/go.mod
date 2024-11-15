@@ -11,6 +11,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
@@ -19,7 +20,7 @@ require (
 )
 
 require (
-	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5
+	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241115085937-348f8e122a5a
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect

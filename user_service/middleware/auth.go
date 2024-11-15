@@ -8,6 +8,7 @@ import (
     "user_service/config"
 
     "github.com/golang-jwt/jwt/v5"
+    "github.com/dinesh-14699/go_assignment/common_utils/logger"
 )
 
 type contextKey string
@@ -60,6 +61,11 @@ func AuthMiddleware(next http.Handler) http.Handler {
                 http.Error(w, "Invalid user ID in token", http.StatusUnauthorized)
                 return
             }
+            
+            userID, _ := claims["user_id"].(string)
+            username, _ := claims["username"].(string)
+    
+            logger.UpdateLogContext(username,userID)
         } else {
             http.Error(w, "Invalid token claims", http.StatusUnauthorized)
             return
