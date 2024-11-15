@@ -16,6 +16,7 @@ require (
 	cloud.google.com/go/iam v1.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/dinesh-14699/go_assignment v0.0.0-20241115055956-237efd9a205d // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -44,7 +45,7 @@ require (
 
 require (
 	cloud.google.com/go/pubsub v1.45.1
-	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5
+	github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241115055956-237efd9a205d
 	github.com/go-echarts/go-echarts/v2 v2.4.5
 	github.com/go-redis/redis/v8 v8.11.5
 	golang.org/x/sys v0.26.0 // indirect

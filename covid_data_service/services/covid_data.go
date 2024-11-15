@@ -1,7 +1,7 @@
 package services
 
 import (
-	"covid_handler/cache"
+	"github.com/dinesh-14699/go_assignment/common_utils/cache"
 	"encoding/json"
 	"fmt"
 	"net/http"

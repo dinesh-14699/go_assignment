@@ -1,22 +1,21 @@
 package main
 
 import (
-	// "covid_handler/cache"
 	"covid_handler/handlers"
 	"covid_handler/pubsubservice"
 
 	// "covid_handler/middleware"
 	"log"
 	"net/http"
-	"covid_handler/logger"
-
+    "github.com/dinesh-14699/go_assignment/common_utils/logger"
+	"github.com/dinesh-14699/go_assignment/common_utils/cache"
 	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
     router := chi.NewRouter()
-    // cache.InitializeCache("100.29.10.135:6379", "", 0)
+    cache.InitializeCache("98.82.179.245:6379", "", 0)
 
     // router.Use(middleware.Logger)
     // router.Use(middleware.TokenValidationMiddleware) 

@@ -22,8 +22,12 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
+github.com/dinesh-14699/go_assignment v0.0.0-20241115055956-237efd9a205d h1:lVUJHpaBBI0YNtEHgxPPodWeM3Y9lIzkf8DmKu3uzIY=
+github.com/dinesh-14699/go_assignment v0.0.0-20241115055956-237efd9a205d/go.mod h1:eOURNX3yqNgEelEt5UXAud5ciB1ymluR7rBUPZIi1bM=
 github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5 h1:eIrgY4rcBN2d4biS+bYmKajTLMk3i2hdhgCXV+2wGPE=
 github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241111112026-dfbc755c0fc5/go.mod h1:h/4AhNrr/Tqz8xYwEPhtbwmGxQ9qffuAZuieR6CDnjU=
+github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241115055956-237efd9a205d h1:SSGrVLLTrSy3BtR0A8YD39Odm/ygcz3dRNj30fdzHfA=
+github.com/dinesh-14699/go_assignment/common_utils v0.0.0-20241115055956-237efd9a205d/go.mod h1:d7UyYP+IyegAO0IboV40L3w5uThMsJSJp2QaouT1fAk=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
